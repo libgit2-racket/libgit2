@@ -4,4 +4,4 @@
 *.bak
 .DS_Store
 compiled/
-/doc/
+/libgit2/doc/

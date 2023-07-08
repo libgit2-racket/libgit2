@@ -32,7 +32,7 @@ jobs:
           architecture: "x64"
           distribution: "full"
       - name: Install Package and its Dependencies
-        run: raco pkg install --auto --batch --name ${{ env.RKT_PKG }}
+        run: raco pkg install --auto --batch --name ${{ env.RKT_PKG }} $RKT_PKG
       - name: Run Tests
         run: raco test -x -p $RKT_PKG
       - name: Check Package Dependencies
