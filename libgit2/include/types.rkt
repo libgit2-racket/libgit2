@@ -21,7 +21,6 @@
          git_repository?
          _git_object
          _git_object/null
-         _git_revwalk
          _git_tag
          _git_blob
          _git_blob/null
@@ -98,7 +97,7 @@
 (define-cpointer-type _git_repository)
 ;; not here: _git_worktree
 (define-cpointer-type _git_object)
-(define-cpointer-type _git_revwalk)
+;; moved _git_revwalk to "revwalk.rkt"
 (define-cpointer-type _git_tag)
 (define-cpointer-type _git_blob)
 (define-cpointer-type _git_commit)
@@ -222,16 +221,3 @@
 (define-cpointer-type _git_diff)
 (define-cpointer-type _git_merge_result)
 (define-cpointer-type _git_patch)
-
-
-
-
-
-
-
-
-
-
-
-
-

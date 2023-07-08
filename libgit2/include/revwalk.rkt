@@ -3,12 +3,14 @@
 (require ffi/unsafe
          (submod "oid.rkt" private)
          (only-in "types.rkt"
-                  _git_repository
-                  _git_revwalk)
+                  _git_repository)
          "../private/base.rkt")
 
 (provide (all-defined-out))
+
 ; Types
+
+(define-cpointer-type _git_revwalk)
 
 (define _git_sort_t
   (_bitmask '(GIT_SORT_NONE = 0
@@ -43,8 +45,13 @@
   (_fun _git_revwalk _git_repository -> _int)
   git_revwalk_free)
 
-(define-libgit2/check git_revwalk_next
-  (_fun _git_oid-pointer _git_revwalk -> _int))
+(define-libgit2 git_revwalk_next
+  (_fun [oid : (_ptr o _git_oid)]
+        _git_revwalk
+        -> [code : (_git_error_code/check #:handle '(GIT_ITEROVER))]
+        -> (if (eq? code 'GIT_ITEROVER)
+               #f
+               oid)))
 
 (define-libgit2/check git_revwalk_push
   (_fun _git_revwalk _git_oid-pointer -> _int))
