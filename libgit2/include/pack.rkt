@@ -5,7 +5,8 @@
          (only-in "types.rkt"
                   _git_repository
                   _git_transfer_progress_cb
-                  _git_packbuilder
+                  _git_packbuilder)
+         (only-in "revwalk.rkt"
                   _git_revwalk)
          "../private/buffer.rkt"
          "../private/base.rkt")
