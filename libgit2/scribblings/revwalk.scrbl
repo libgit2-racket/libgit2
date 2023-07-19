@@ -1,31 +1,28 @@
 #lang scribble/manual
 
-@(require (for-label racket))
+@(require (for-label racket libgit2)
+          "doc.rkt")
 
 @title{Revwalk}
 
-@defmodule[libgit2/include/revwalk]
+@defmodule-lg2[libgit2/include/revwalk]
 
 
-@defproc[(git_revwalk_add_hide_cb
-          [walk revwalk?]
-          [hide_cb git_revwalk_hide_cb]
-          [payload bytes?])
+@defproc[(git_revwalk_add_hide_cb [walk revwalk?]
+                                  [hide_cb git_revwalk_hide_cb]
+                                  [payload bytes?])
          integer?]{
  Adds a callback function to hide a commit and its parents
 
 }
 
-@defproc[(git_revwalk_free
-          [walk revwalk?])
+@defproc[(git_revwalk_free [walk revwalk?])
          void?]{
  Free a revision walker previously allocated.
 
 }
 
-@defproc[(git_revwalk_hide
-          [walk revwalk?]
-          [commit_id oid?])
+@defproc[(git_revwalk_hide [walk revwalk?] [commit_id oid?])
          integer?]{
  Mark a commit (and its ancestors) uninteresting for the output.
 
@@ -35,9 +32,7 @@
 
 }
 
-@defproc[(git_revwalk_hide_glob
-          [walk revwalk?]
-          [glob string?])
+@defproc[(git_revwalk_hide_glob [walk revwalk?] [glob string?])
          integer?]{
  Hide matching references.
 
@@ -49,16 +44,13 @@
 
 }
 
-@defproc[(git_revwalk_hide_head
-          [walk revwalk?])
+@defproc[(git_revwalk_hide_head [walk revwalk?])
          integer?]{
  Hide the repository's HEAD
 
 }
 
-@defproc[(git_revwalk_hide_ref
-          [walk revwalk?]
-          [refname string?])
+@defproc[(git_revwalk_hide_ref [walk revwalk?] [refname string?])
          integer?]{
  Hide the OID pointed to by a reference
 
@@ -66,8 +58,7 @@
 
 }
 
-@defproc[(git_revwalk_new
-          [repo repository?])
+@defproc[(git_revwalk_new [repo repository?])
          revwalk?]{
  Allocate a new revision walker to iterate through a repo.
 
@@ -79,23 +70,25 @@
 
 }
 
-@defproc[(git_revwalk_next
-          [out oid?]
-          [walk revwalk?])
-         integer?]{
- Get the next commit from the revision walk.
+@defproc[(git_revwalk_next [walk revwalk?])
+         (or/c oid? #f)]{
+ Pops the next commit from @racket[walk], or, there are no
+ more commits, returns @racket[#f]
 
- The initial call to this method is not blocking when iterating through a repo with a time-sorting mode.
+ The initial call to this method is not blocking when
+ iterating through a repo with a time-sorting mode.
 
- Iterating with Topological or inverted modes makes the initial call blocking to preprocess the commit list, but this block should be mostly unnoticeable on most repositories (topological preprocessing times at 0.3s on the git.git repo).
+ Iterating with Topological or inverted modes makes the
+ initial call blocking to preprocess the commit list, but
+ this block should be mostly unnoticeable on most
+ repositories (topological preprocessing times at 0.3s on the
+ git.git repo).
 
  The revision walker is reset when the walk is over.
 
 }
 
-@defproc[(git_revwalk_push
-          [walk revwalk?]
-          [id oid?])
+@defproc[(git_revwalk_push [walk revwalk?] [id oid?])
          integer?]{
  Add a new root for the traversal
 
@@ -107,9 +100,7 @@
 
 }
 
-@defproc[(git_revwalk_push_glob
-          [walk revwalk?]
-          [glob string?])
+@defproc[(git_revwalk_push_glob [walk revwalk?] [glob string?])
          integer?]{
  Push matching references
 
@@ -121,16 +112,13 @@
 
 }
 
-@defproc[(git_revwalk_push_head
-          [walk revwalk?])
+@defproc[(git_revwalk_push_head [walk revwalk?])
          integer?]{
  Push the repository's HEAD
 
 }
 
-@defproc[(git_revwalk_push_range
-          [walk revwalk?]
-          [range string?])
+@defproc[(git_revwalk_push_range [walk revwalk?] [range string?])
          integer?]{
  Push and hide the respective endpoints of the given range.
 
@@ -138,9 +126,7 @@
 
 }
 
-@defproc[(git_revwalk_push_ref
-          [walk revwalk?]
-          [refname string?])
+@defproc[(git_revwalk_push_ref [walk revwalk?] [refname string?])
          integer?]{
  Push the OID pointed to by a reference
 
@@ -148,15 +134,13 @@
 
 }
 
-@defproc[(git_revwalk_repository
-          [walk revwalk?])
+@defproc[(git_revwalk_repository [walk revwalk?])
          repository?]{
  Return the repository on which this walker is operating.
 
 }
 
-@defproc[(git_revwalk_reset
-          [walker revwalk?])
+@defproc[(git_revwalk_reset [walker revwalk?])
          void?]{
  Reset the revision walker for reuse.
 
@@ -166,8 +150,7 @@
 
 }
 
-@defproc[(git_revwalk_simplify_first_parent
-          [walk revwalk?])
+@defproc[(git_revwalk_simplify_first_parent [walk revwalk?])
          void?]{
  Simplify the history by first-parent
 
@@ -175,10 +158,10 @@
 
 }
 
-@defproc[(git_revwalk_sorting
-          [walk revwalk?]
-          [sort_mode _git_sort_t])
-         void?]{
+@deftogether[
+ (@defproc[(git_revwalk_sorting [walk revwalk?] [sort_mode git_sort/c])
+           void?]
+   @defthing[git_sort/c flat-contract?])]{
  Change the sorting mode when iterating through the repository's contents.
 
  Changing the sorting mode resets the walker.
