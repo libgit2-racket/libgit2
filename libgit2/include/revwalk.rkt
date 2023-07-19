@@ -12,11 +12,12 @@
 
 (define-cpointer-type _git_revwalk)
 
-(define _git_sort_t
-  (_bitmask '(GIT_SORT_NONE = 0
-              GIT_SORT_TOPOLOGICAL = 1
-              GIT_SORT_TIME = 2
-              GIT_SORT_REVERSE = 4)))
+(define-bitmask _git_sort_t
+  #:contract git_sort/c
+  [GIT_SORT_NONE = 0]
+  [GIT_SORT_TOPOLOGICAL = 1]
+  [GIT_SORT_TIME = 2]
+  [GIT_SORT_REVERSE = 4])
 
 (define _git_revwalk_hide_cb
   (_fun _git_oid-pointer _bytes -> _int))
