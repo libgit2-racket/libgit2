@@ -1,7 +1,10 @@
 #lang scribble/manual
 
 @title{Libgit2: Bindings for the libgit2 Git Library}
-@author[(author+email "Brad Busching" "bradley.busching@gmail.com")]
+@author[(author+email "Brad Busching" "bradley.busching@gmail.com")
+        (author+email @elem{Philip M@superscript{c}Grath}
+                      "philip@philipmcgrath.com")
+        @elem{other contributors}]
 @defmodule[libgit2]
 
 @(require "doc.rkt")
@@ -37,10 +40,10 @@ like memory management and checking error codes.
  been dealt with, for example---but some additions and
  modifications remain to be addressed.
 
- Hopefully these details can be addressed and this package
- stabilized around the API of libgit2 v1.4 series.
- You can contribute to the development effort
- @hyperlink["https://github.com/bbusching/libgit2/"]{on Github}.
+ Community contributors are working to address these details
+ and stabilize this package around the post-1.0 libgit2 API.
+ You can contribute to the development effort at
+ @url{https://github.com/libgit2-racket/libgit2}.
 }
 
 In addition to the Racket interface, the native libgit2
@@ -48,8 +51,9 @@ library is distributed via platform-specific dependencies in
 the Racket package system, currently for GNU/Linux (x86_64),
 Windows (x86_64 and i386), and Mac OS (x86_64 and Aarch64).
 
-The libgit2 Racket bindings began as a senior project
-at California Polytechnic State University, San Luis Obispo
+The libgit2 Racket bindings were initially created by
+Brad Busching as a senior project
+at California Polytechnic State University, San Luis Obispo,
 under the guidance of John Clements
 (@(hyperlink "mailto:clements@racket-lang.org" "clements@racket-lang.org")).
 
