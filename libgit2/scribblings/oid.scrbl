@@ -1,9 +1,22 @@
 #lang scribble/manual
 
 @title{Object IDs}
-@(require "doc.rkt")
+@(require (only-in scribble/racket result-color)
+          (except-in "doc.rkt" make-libgit2-eval))
 
 @defmodule-lg2[libgit2/include/oid]
+
+@begin[
+ ;; workaround for https://github.com/libgit2-racket/libgit2/issues/3
+ (require (only-in libgit2/private/base/define
+                   libgit2-available?)
+          racket/runtime-path)
+ (define-runtime-path log-file
+   "oid-logged-examples.rktd")
+ (define workaround-eval
+   (make-log-based-eval log-file 'replay))
+ (workaround-eval '(require libgit2 racket))
+ ]
 
 @deftogether[
  (@defproc[(git_oid_fromstr [str git-oid-string/c])
@@ -25,8 +38,10 @@
  characters long, which is enforced by the contract @racket[git-oid-string/c].
 
  @examples[
- #:eval (make-libgit2-eval) #:once
- (git_oid_fromstr "555c0bd2b220e74e77a2d4ead659ffad79175dfa")
+ #:eval workaround-eval ;(make-libgit2-eval) #:once
+ (eval:alts (git_oid_fromstr "555c0bd2b220e74e77a2d4ead659ffad79175dfa")
+            ;; workaround for https://github.com/libgit2-racket/libgit2/issues/3
+            (eval:result (elem #:style result-color "#<cpointer+offset>")))
  (code:comment "too short")
  (eval:error (git_oid_fromstr "bda0839"))
  (code:comment "not a hex string")
@@ -37,7 +52,7 @@
          git_oid?]{
  Returns a new @tech{object ID} value equivalent to @racket[src].
  @examples[
- #:eval (make-libgit2-eval) #:once
+ #:eval workaround-eval ;(make-libgit2-eval) #:once
  (define a
    (git_oid_fromstr "555c0bd2b220e74e77a2d4ead659ffad79175dfa"))
  (eval:check (git_oid_equal a (git_oid_cpy a)) #t)
@@ -51,7 +66,7 @@
  Recognizes @tech{object ID} values equivalent to the
  hex string @racket["0000000000000000000000000000000000000000"].
  @examples[
- #:eval (make-libgit2-eval) #:once
+ #:eval workaround-eval ;(make-libgit2-eval) #:once
  (eval:check (git_oid_is_zero (git_oid_fromstr (make-string GIT_OID_HEXSZ #\0))) #t)
  (eval:check (git_oid_is_zero
               (git_oid_fromstr "555c0bd2b220e74e77a2d4ead659ffad79175dfa"))
@@ -65,7 +80,7 @@
  where @racket[git_oid_streq] is like @racket[git_oid_equal],
  except that @racket[git_oid_streq] takes its second argument in string form.
  @examples[
- #:eval (make-libgit2-eval) #:once
+ #:eval workaround-eval ;(make-libgit2-eval) #:once
  (define str
    "7b70fdd9970245505229ef2127586350aaa8ad38")
  (eval:check (git_oid_equal (git_oid_fromstr str) (git_oid_fromstr str)) #t)
@@ -101,7 +116,7 @@
  Converts the @tech{object ID} @racket[id] to a hexidecimal string.
  Any letters in the resulting string will be in lower case.
  @examples[
- #:eval (make-libgit2-eval) #:once
+ #:eval workaround-eval ;(make-libgit2-eval) #:once
  (eval:check (git_oid_fmt (git_oid_fromstr "AD1B3CC099B788DCB066C56346FC8854E70E821C"))
              "ad1b3cc099b788dcb066c56346fc8854e70e821c")
  ]}
@@ -113,7 +128,7 @@
  Like @racket[git_oid_fmt], but only converts the first @racket[n]
  hexidecimal digits of @racket[id].
  @examples[
- #:eval (make-libgit2-eval) #:once
+ #:eval workaround-eval ;(make-libgit2-eval) #:once
  (define id
    (git_oid_fromstr "AD1B3CC099B788DCB066C56346FC8854E70E821C"))
  (eval:check (git_oid_nfmt id 6)
@@ -130,7 +145,7 @@
  a path within that directory.
 
  @examples[
- #:eval (make-libgit2-eval) #:once
+ #:eval workaround-eval ;(make-libgit2-eval) #:once
  (git_oid_pathfmt (git_oid_fromstr "40dc88bde003670bae6df1f0cffb1ffb5d93dee4"))
  ]}
 
@@ -165,7 +180,7 @@
  and keeps the algorithm fast and memory-efficient.''
  
  @examples[
- #:eval (make-libgit2-eval) #:once
+ #:eval workaround-eval ;(make-libgit2-eval) #:once
  (define oid-strings
    (set "ad1b3cc099b788dcb066c56346fc8854e70e821c"
         "db775d20c1655c72a95dd40d1a75c0ad4f243461"
@@ -181,4 +196,4 @@
          (substring str 0 min-length))
        string<?)
  ]}
-
+@close-eval[workaround-eval]
