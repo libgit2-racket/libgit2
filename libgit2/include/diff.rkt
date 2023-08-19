@@ -271,7 +271,7 @@
   git_diff_free)
 
 (define-libgit2/alloc git_diff_index_to_workdir
-  (_fun _git_diff _git_repository _git_index _git_diff_opts-pointer -> _int)
+  (_fun _git_diff _git_repository _git_index _git_diff_opts-pointer/null -> _int)
   git_diff_free)
 
 (define-libgit2 git_diff_options_init
@@ -311,17 +311,17 @@
   (_fun (_git_buf/bytes-or-null) _git_diff _git_diff_format_t -> _int))
 
 (define-libgit2/alloc git_diff_tree_to_index
-  (_fun _git_diff _git_repository _git_tree _git_index _git_diff_opts-pointer -> _int)
+  (_fun _git_diff _git_repository _git_tree _git_index _git_diff_opts-pointer/null -> _int)
   git_diff_free)
 
 (define-libgit2/alloc git_diff_tree_to_tree
-  (_fun _git_diff _git_repository _git_tree _git_tree _git_diff_opts-pointer -> _int)
+  (_fun _git_diff _git_repository _git_tree _git_tree _git_diff_opts-pointer/null -> _int)
   git_diff_free)
 
 (define-libgit2/alloc git_diff_tree_to_workdir
-  (_fun _git_diff _git_repository _git_tree _git_diff_opts-pointer -> _int)
+  (_fun _git_diff _git_repository _git_tree _git_diff_opts-pointer/null -> _int)
   git_diff_free)
 
 (define-libgit2/alloc git_diff_tree_to_workdir_with_index
-  (_fun _git_diff _git_repository _git_tree _git_diff_opts-pointer -> _int)
+  (_fun _git_diff _git_repository _git_tree _git_diff_opts-pointer/null -> _int)
   git_diff_free)
